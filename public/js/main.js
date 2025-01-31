@@ -1,6 +1,12 @@
 const chatForm = document.getElementById("chat-form")
 const chatMessages = document.querySelector('.chat-messages') 
 
+// get user name and room from url using  qs cdn
+const {username , room } = Qs.parse(location.search,{
+  ignoreQueryPrefix: true
+})
+console.log(username , room )
+
 const socket  = io();
 
 // gets any text emited as message from the backend 
