@@ -5,6 +5,7 @@ const path = require("path")
 const http = require("http")
 const socketio = require("socket.io")
 const formatMessage = require('./utils/messages')
+const {userJoin , getCurrentUser} = require('./utils/users')
 
 
 const app = express()
@@ -15,27 +16,40 @@ const io = socketio(server)
 
 // run when clients connects
 io.on('connection',socket =>{
+    const botname = 'Jeth';
     console.log('New connection 😁!');
 
-    // welcome current user
-    const botname = 'Jeth';
+    // getting room and username to join room
+    socket.on('joinRoom', ({username , room})=>{
+
+        // making user join room
+        const user = userJoin(socket.id ,username , room)
+        socket.join(user.room)
+
+     // welcome current user
+    
     socket.emit('message',formatMessage( botname,'Welcome to jethchat!'));
 
     // broadcast when a user connects
-    socket.broadcast.emit('message',formatMessage(botname,'A user has joined the chat'));
+    socket.broadcast.to(user.room).emit('message',formatMessage(botname,`${user.username} has joined the chat`));
 
-    // runs when client disconnects
-    socket.on('disconnect',()=>{
-        io.emit('message',formatMessage(botname,'A user has left the chat!'));
     })
 
     // listen for chatmessages
     socket.on('chatmessage',(msg)=>{
         console.log(msg)
+        const user = getCurrentUser(socket.id)
 
         // send back to other romm members
-        io.emit('message' ,formatMessage('User', msg))
+        io.to(user.room).emit('message' ,formatMessage( user.username, msg))
+    });
+
+
+     // runs when client disconnects
+     socket.on('disconnect',()=>{
+        io.emit('message',formatMessage(botname,'A user has left the chat!'));
     })
+
 })
 
 

@@ -9,6 +9,9 @@ console.log(username , room )
 
 const socket  = io();
 
+// joining chat room using the name and room selected from the url or by user
+socket.emit('joinRoom', {username , room})
+
 // gets any text emited as message from the backend 
 socket.on('message', message =>{
    console.log(message)
