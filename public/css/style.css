@@ -89,6 +89,8 @@ a {
 	padding: 30px;
 	max-height: 500px;
 	overflow-y: scroll;
+	font-family: sans-serif;
+	font-size: 18px;
 }
 
 .chat-messages .message {
@@ -130,7 +132,7 @@ a {
 .join-container {
 	max-width: 500px;
 	margin: 80px auto;
-	color: #fff;
+	color: #ffffff;
 }
 
 .join-header {
@@ -143,7 +145,8 @@ a {
 
 .join-main {
 	padding: 30px 40px;
-	background: var(--dark-color-b);
+	/* background: var(--dark-color-b); */
+	border: 1px solid black;
 }
 
 .join-main p {
